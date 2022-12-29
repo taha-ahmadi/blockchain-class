@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/ardanlabs/blockchain/foundation/blockchain/genesis"
 	"net/http"
 	"os"
 	"os/signal"
@@ -94,6 +95,14 @@ func run(log *zap.SugaredLogger) error {
 		return fmt.Errorf("generating config for output: %w", err)
 	}
 	log.Infow("startup", "config", out)
+
+	// =========================================================================
+	// Blockchain Support
+	gen, err := genesis.Load()
+	if err != nil {
+		return fmt.Errorf("genesis block load: %w", err)
+	}
+	log.Infow("startup", "genesis", gen)
 
 	// =========================================================================
 	// Start Debug Service
